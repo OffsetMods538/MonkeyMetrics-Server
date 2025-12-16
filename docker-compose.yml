@@ -25,6 +25,7 @@ services:
     image: grafana/grafana
     container_name: grafana
     restart: unless-stopped
+    user: "0"
     env_file: .env
     volumes:
       - ./grafana/data:/var/lib/grafana:rw
