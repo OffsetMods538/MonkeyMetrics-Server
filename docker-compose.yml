@@ -17,7 +17,6 @@ services:
     restart: unless-stopped
     volumes:
       - ./prometheus/data:/etc/prometheus:rw
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     networks:
       - telemetry
 
@@ -25,10 +24,8 @@ services:
     image: grafana/grafana
     container_name: grafana
     restart: unless-stopped
-    user: "0"
     env_file: .env
     volumes:
-      - ./grafana/data:/var/lib/grafana:rw
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
       - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
     networks:
