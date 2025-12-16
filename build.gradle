@@ -1,8 +1,9 @@
 plugins {
     id 'java'
+    id 'com.gradleup.shadow' version '9.3.0'
 }
 
-group = 'top.offsetmonkey538.monkeylitics'
+group = 'top.offsetmonkey538.monkeymetrics'
 version = '1.0-SNAPSHOT'
 
 repositories {
@@ -10,11 +11,15 @@ repositories {
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation "io.netty:netty-all:${project.netty_version}" // TODO: probably only include alll that I need
+    implementation "io.prometheus:prometheus-metrics-core:${project.prometheus_version}"
+    implementation "io.prometheus:prometheus-metrics-exporter-httpserver:${project.prometheus_version}"
+    implementation "com.google.code.gson:gson:${project.gson_version}"
+    compileOnly "org.jetbrains:annotations:26.0.2"
 }
 
-test {
-    useJUnitPlatform()
+jar {
+    manifest {
+        attributes "Main-Class": "top.offsetmonkey538.monkeymetrics.Main"
+    }
 }
