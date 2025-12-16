@@ -1,0 +1,85 @@
+{
+  "id": null,
+  "title": "Minecraft Telemetry",
+  "uid": "minecraft-dashboard",
+  "timezone": "browser",
+  "schemaVersion": 36,
+  "version": 1,
+  "editable": false,
+  "panels": [
+    {
+      "type": "barchart",
+      "title": "Mods Used Most",
+      "targets": [
+        {
+          "expr": "sum by (mod) (increase(minecraft_mod_installs_total))",
+          "legendFormat": "{{mod}}"
+        }
+      ]
+    },
+    {
+      "type": "barchart",
+      "title": "Minecraft Versions",
+      "targets": [
+        {
+          "expr": "sum by (minecraft_version) (increase(minecraft_mod_installs_total))",
+          "legendFormat": "{{minecraft_version}}"
+        }
+      ]
+    },
+    {
+      "type": "barchart",
+      "title": "Loaders Used",
+      "targets": [
+        {
+          "expr": "sum by (loader) (increase(minecraft_mod_installs_total))",
+          "legendFormat": "{{loader}}"
+        }
+      ]
+    },
+    {
+      "type": "barchart",
+      "title": "Mod Versions for Selected Mod",
+      "targets": [
+        {
+          "expr": "sum by (mod_version) (increase(minecraft_mod_installs_total{mod=\"$mod\"}))",
+          "legendFormat": "{{mod_version}}"
+        }
+      ]
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "mod",
+        "type": "query",
+        "label": "Mod",
+        "datasource": "Prometheus",
+        "query": "label_values(minecraft_mod_installs_total, mod)",
+        "multi": true,
+        "includeAll": true,
+        "refresh": 1
+      },
+      {
+        "name": "minecraft_version",
+        "type": "query",
+        "label": "Minecraft Version",
+        "datasource": "Prometheus",
+        "query": "label_values(minecraft_mod_installs_total, minecraft_version)",
+        "multi": true,
+        "includeAll": true,
+        "refresh": 1
+      },
+      {
+        "name": "loader",
+        "type": "query",
+        "label": "Loader",
+        "datasource": "Prometheus",
+        "query": "label_values(minecraft_mod_installs_total, loader)",
+        "multi": true,
+        "includeAll": true,
+        "refresh": 1
+      }
+    ]
+  }
+}

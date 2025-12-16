@@ -1,0 +1,9 @@
+providers:
+  - name: 'Minecraft'
+    orgId: 1
+    folder: 'Minecraft'
+    type: file
+    disableDeletion: false
+    editable: false
+    options:
+      path: /var/lib/grafana/dashboards
