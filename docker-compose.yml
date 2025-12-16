@@ -26,8 +26,9 @@ services:
     container_name: grafana
     restart: unless-stopped
     volumes:
-      - ./prometheus/data:/etc/prometheus:rw
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./grafana/data:/var/lib/grafana:rw
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
     networks:
       - traefik-proxy
       - telemetry
