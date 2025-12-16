@@ -27,7 +27,7 @@ jobs:
           cache-read-only: false
 
       - name: Store lowercase repo name
-        run: echo "${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+        run: echo "image_name=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
 
       - name: Build with Gradle
         run: ./gradlew build copyJarForDocker
