@@ -23,3 +23,11 @@ jar {
         attributes "Main-Class": "top.offsetmonkey538.monkeymetrics.Main"
     }
 }
+
+tasks.register("copyJarForDocker", Copy) {
+    dependsOn tasks.shadowJar
+
+    from(tasks.shadowJar.outputs)
+    into(layout.buildDirectory.dir("docker"))
+    rename { "monkeymetrics.jar" }
+}
