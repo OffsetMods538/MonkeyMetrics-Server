@@ -1,0 +1,43 @@
+services:
+  ingest:
+    image: ghcr.io/offsetmods538/monkeymetrics-server:latest
+    container_name: ingest
+    restart: unless-stopped
+    networks:
+      - traefik-proxy
+      - telemetry
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.telemetry-ingest.rule=Host(`analytics.offsetmonkey538.top`) && PathPrefix(`/ingest`)"
+      - "traefik.http.services.telemetry-ingest.loadbalancer.server.port=6969"
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus/data:/etc/prometheus:rw
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - telemetry
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    volumes:
+      - ./prometheus/data:/etc/prometheus:rw
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - traefik-proxy
+      - telemetry
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.telemetry-grafana.rule=Host(`analytics.offsetmonkey538.top`)"
+      - "traefik.http.services.telemetry-grafana.loadbalancer.server.port=3000"
+
+
+networks:
+    telemetry:
+    traefik-proxy:
+      external: true
