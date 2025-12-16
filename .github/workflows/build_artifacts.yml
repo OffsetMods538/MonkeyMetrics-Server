@@ -29,6 +29,9 @@ jobs:
       - name: Store short commit hash
         run: echo "short_commit_hash=$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
 
+      - name: Store lowercase repo name
+        run: echo "image_name=ghcr.io/${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+
       - name: Build with Gradle
         run: ./gradlew build copyJarForDocker
         env:
@@ -53,5 +56,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:latest-commit
-            ghcr.io/${{ github.repository }}:${{ env.short_commit_hash }}
+            ghcr.io/${{ env.image_name }}:latest-commit
+            ghcr.io/${{ env.image_name }}:${{ env.short_commit_hash }}
