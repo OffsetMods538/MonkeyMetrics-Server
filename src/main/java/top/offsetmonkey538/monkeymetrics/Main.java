@@ -17,10 +17,15 @@ import java.io.IOException;
 
 public class Main {
     public static final PrometheusRegistry REGISTRY = new PrometheusRegistry();
-    public static final Counter COUNTER = Counter.builder()
-            .name("launches")
-            .help("Total launches of specific mod and its environment")
-            .labelNames("mod", "mod_version", "mod_loader", "minecraft_version")
+    public static final Counter MOD_COUNTER = Counter.builder()
+            .name("mod_launches")
+            .help("Total launches of mods and their environments")
+            .labelNames("mod", "mod_version", "minecraft_version", "environment", "mod_loader")
+            .register(REGISTRY);
+    public static final Counter ENVIRONMENT_COUNTER = Counter.builder()
+            .name("minecraft_launches")
+            .help("Total launches of modded minecraft environments")
+            .labelNames("minecraft_version", "environment", "mod_loader")
             .register(REGISTRY);
 
     static void main() {

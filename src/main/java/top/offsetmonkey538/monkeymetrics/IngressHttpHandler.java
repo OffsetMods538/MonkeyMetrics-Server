@@ -29,7 +29,7 @@ public final class IngressHttpHandler extends SimpleChannelInboundHandler<FullHt
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
         if (!request.decoderResult().isSuccess()) {
-            sendError(ctx, BAD_REQUEST);
+            sendError(ctx);
             return;
         }
 
@@ -49,7 +49,7 @@ public final class IngressHttpHandler extends SimpleChannelInboundHandler<FullHt
             sendError(ctx, METHOD_NOT_ALLOWED, "Only POST requests are allowed on this path");
             return;
         }
-        final String contentType = request.headers().get(HttpHeaderNames.CONTENT_TYPE);
+        final String contentType = request.headers().get(CONTENT_TYPE);
         if (contentType == null || !contentType.toLowerCase().startsWith("application/json")) {
             sendError(ctx, UNSUPPORTED_MEDIA_TYPE, "Content type must be set to application/json");
             return;
@@ -69,16 +69,28 @@ public final class IngressHttpHandler extends SimpleChannelInboundHandler<FullHt
             return;
         }
 
-        final String minecraftVersion = normalize(json.get("minecraft_version").getAsString());
+        final String minecraftVersion = normalize(json.get("minecraft").getAsString());
+        final String environment = switch (normalize(json.get("env").getAsString())) {
+            case "c" -> "client";
+            case "s" -> "server";
+            default -> throw new RuntimeException("Unexpected value in 'env'");
+        };
         final String modLoader = normalize(json.get("loader").getAsString());
         final JsonObject mods = json.get("mods").getAsJsonObject();
 
+        Main.ENVIRONMENT_COUNTER.labelValues(
+                minecraftVersion,
+                environment,
+                modLoader
+        ).inc();
+
         for (Map.Entry<String, JsonElement> modEntry : mods.entrySet()) {
-            Main.COUNTER.labelValues(
+            Main.MOD_COUNTER.labelValues(
                     normalize(modEntry.getKey()),
                     normalize(modEntry.getValue().getAsString()),
-                    modLoader,
-                    minecraftVersion
+                    minecraftVersion,
+                    environment,
+                    modLoader
             ).inc();
         }
 
@@ -88,7 +100,8 @@ public final class IngressHttpHandler extends SimpleChannelInboundHandler<FullHt
     private static List<String> validateJson(final JsonObject json) {
         final List<String> result = new ArrayList<>(3);
 
-        if (!json.has("minecraft_version")) result.add("'minecraft_version' field is missing!");
+        if (!json.has("minecraft")) result.add("'minecraft' field is missing!");
+        if (!json.has("env")) result.add("'env' field is missing!");
         if (!json.has("loader")) result.add("'loader' field is missing!");
         if (!json.has("mods")) result.add("'mods' field is missing!");
 
@@ -100,8 +113,8 @@ public final class IngressHttpHandler extends SimpleChannelInboundHandler<FullHt
     }
 
 
-    private static void sendError(@NotNull ChannelHandlerContext ctx, @NotNull HttpResponseStatus status) {
-        sendError(ctx, status, null);
+    private static void sendError(@NotNull ChannelHandlerContext ctx) {
+        sendError(ctx, HttpResponseStatus.BAD_REQUEST, null);
     }
 
     private static void sendError(@NotNull ChannelHandlerContext ctx, @NotNull HttpResponseStatus status, @Nullable String reason) {
