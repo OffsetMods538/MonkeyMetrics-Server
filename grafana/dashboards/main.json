@@ -1,0 +1,32 @@
+{
+  "editable": false,
+  "panels": [
+    {
+      "type": "dashlist",
+      "title": "Dashboards",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "showFolderNames": true,
+        "showHeadings": true,
+        "showRecentlyViewed": false,
+        "showSearch": true,
+        "showStarred": false
+      },
+      "pluginVersion": "12.3.1"
+    }
+  ],
+  "preload": false,
+  "timezone": "browser",
+  "title": "Dashboards",
+  "version": 1
+}

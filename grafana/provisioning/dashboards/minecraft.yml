@@ -4,7 +4,7 @@ providers:
   - name: 'Minecraft'
     folder: 'Minecraft'
     type: file
-    disableDeletion: false
+    disableDeletion: true
     editable: false
     options:
-      path: /var/lib/grafana/dashboards
+      path: /var/lib/grafana/dashboards/minecraft

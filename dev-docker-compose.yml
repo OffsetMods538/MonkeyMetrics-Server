@@ -1,0 +1,39 @@
+services:
+  ingest:
+    image: ghcr.io/offsetmods538/monkeymetrics-server:4787a6e
+    container_name: ingest
+    restart: unless-stopped
+    ports:
+      - "6969:6969"
+      - "9696:9696"
+    networks:
+      - telemetry
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:rw
+      - ./prometheus/data:/etc/prometheus:rw
+    networks:
+      - telemetry
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    networks:
+      - telemetry
+
+
+networks:
+    telemetry:
