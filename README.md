@@ -11,7 +11,7 @@ My mods collect the following anonymous usage data every time the game is launch
 - Minecraft version - the Minecraft version you're using
 - Environment - if you're running on client/server
 - Mod loader - the mod loader you're using
-- Mods - list of mods and their versions. Only includes my mod, the full mod list is *not* sent.
+- Mods - list of mods. Only includes my mod, the full mod list is *not* sent.
 
 Example of JSON data:
 ```json
@@ -19,9 +19,9 @@ Example of JSON data:
   "minecraft": "1.21.4",
   "env": "s",
   "loader": "fabric",
-  "mods": {
-    "monkeylib538": "3.0.0+alpha.2",
-    "loot-table-modifier": "2.0.0+beta.1"
-  }
+  "mods": [
+    "monkeylib538",
+    "loot-table-modifier"
+  ]
 }
 ```

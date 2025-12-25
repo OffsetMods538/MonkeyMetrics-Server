@@ -20,7 +20,7 @@ public class Main {
     public static final Counter MOD_COUNTER = Counter.builder()
             .name("mod_launches")
             .help("Total launches of mods and their environments")
-            .labelNames("mod", "mod_version", "minecraft_version", "environment", "mod_loader")
+            .labelNames("mod", "minecraft_version", "environment", "mod_loader")
             .register(REGISTRY);
     public static final Counter ENVIRONMENT_COUNTER = Counter.builder()
             .name("minecraft_launches")

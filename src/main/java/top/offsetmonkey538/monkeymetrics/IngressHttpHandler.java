@@ -1,9 +1,6 @@
 package top.offsetmonkey538.monkeymetrics;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -76,7 +73,7 @@ public final class IngressHttpHandler extends SimpleChannelInboundHandler<FullHt
             default -> throw new RuntimeException("Unexpected value in 'env'");
         };
         final String modLoader = normalize(json.get("loader").getAsString());
-        final JsonObject mods = json.get("mods").getAsJsonObject();
+        final JsonArray mods = json.get("mods").getAsJsonArray();
 
         Main.ENVIRONMENT_COUNTER.labelValues(
                 minecraftVersion,
@@ -84,10 +81,9 @@ public final class IngressHttpHandler extends SimpleChannelInboundHandler<FullHt
                 modLoader
         ).inc();
 
-        for (Map.Entry<String, JsonElement> modEntry : mods.entrySet()) {
+        for (JsonElement modEntry : mods) {
             Main.MOD_COUNTER.labelValues(
-                    normalize(modEntry.getKey()),
-                    normalize(modEntry.getValue().getAsString()),
+                    normalize(modEntry.getAsString()),
                     minecraftVersion,
                     environment,
                     modLoader
