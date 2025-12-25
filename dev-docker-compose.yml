@@ -13,11 +13,13 @@ services:
     image: prom/prometheus
     container_name: prometheus
     restart: unless-stopped
+    command:
+      - "--storage.tsdb.retention.size=16GB"
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:rw
-      - ./prometheus/data:/etc/prometheus:rw
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/data:/prometheus:rw
     networks:
       - telemetry
 
