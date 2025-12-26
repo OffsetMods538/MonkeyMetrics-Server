@@ -66,14 +66,14 @@ public final class IngressHttpHandler extends SimpleChannelInboundHandler<FullHt
             return;
         }
 
-        final String minecraftVersion = normalize(json.get("minecraft").getAsString());
-        final String environment = switch (normalize(json.get("env").getAsString())) {
+        final String minecraftVersion = normalize(json.get("mc").getAsString());
+        final String environment = switch (normalize(json.get("e").getAsString())) {
             case "c" -> "client";
             case "s" -> "server";
-            default -> throw new RuntimeException("Unexpected value in 'env'");
+            default -> throw new RuntimeException("Unexpected value in 'e'");
         };
-        final String modLoader = normalize(json.get("loader").getAsString());
-        final JsonArray mods = json.get("mods").getAsJsonArray();
+        final String modLoader = normalize(json.get("l").getAsString());
+        final JsonArray mods = json.get("m").getAsJsonArray();
 
         Main.ENVIRONMENT_COUNTER.labelValues(
                 minecraftVersion,
@@ -96,10 +96,10 @@ public final class IngressHttpHandler extends SimpleChannelInboundHandler<FullHt
     private static List<String> validateJson(final JsonObject json) {
         final List<String> result = new ArrayList<>(3);
 
-        if (!json.has("minecraft")) result.add("'minecraft' field is missing!");
-        if (!json.has("env")) result.add("'env' field is missing!");
-        if (!json.has("loader")) result.add("'loader' field is missing!");
-        if (!json.has("mods")) result.add("'mods' field is missing!");
+        if (!json.has("mc")) result.add("Minecraft version 'mc' field is missing!");
+        if (!json.has("e")) result.add("Environment 'e' field is missing!");
+        if (!json.has("l")) result.add("Loader 'l' field is missing!");
+        if (!json.has("m")) result.add("Mods list 'm' field is missing!");
 
         return result;
     }

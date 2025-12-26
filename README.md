@@ -8,18 +8,18 @@ Docker setup used for the instance is available on the docker-stack/master branc
 
 ## What is collected?
 My mods collect the following anonymous usage data every time the game is launched:
-- Minecraft version - the Minecraft version you're using
-- Environment - if you're running on client/server
-- Mod loader - the mod loader you're using
-- Mods - list of mods. Only includes my mod, the full mod list is *not* sent.
+- Minecraft version `mc` - the Minecraft version you're using
+- Environment `e` - if you're running on client/server
+- Mod loader `l` - the mod loader you're using
+- Mods `m` - list of mods. Only includes my mod, the full mod list is *not* sent.
 
 Example of JSON data:
 ```json
 {
-  "minecraft": "1.21.4",
-  "env": "s",
-  "loader": "fabric",
-  "mods": [
+  "mc": "1.21.4",
+  "e": "s",
+  "l": "fabric",
+  "m": [
     "monkeylib538",
     "loot-table-modifier"
   ]
