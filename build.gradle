@@ -4,7 +4,7 @@ plugins {
 }
 
 final String versionSuffix = System.getenv("VERSION_SUFFIX")
-version = "1.3.0${versionSuffix != null && !versionSuffix.isEmpty() ? "+${versionSuffix}" : ""}"
+version = "1.3.1${versionSuffix != null && !versionSuffix.isEmpty() ? "+${versionSuffix}" : ""}"
 println "Version: ${version}"
 group = 'top.offsetmonkey538.monkeymetrics'
 
