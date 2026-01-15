@@ -39,6 +39,27 @@ services:
       - "traefik.http.routers.telemetry-grafana.rule=Host(`analytics.offsetmonkey538.top`)"
       - "traefik.http.services.telemetry-grafana.loadbalancer.server.port=3000"
 
+  grafana-renderer:
+    image: grafana/grafana-image-renderer
+    container_name: grafana-renderer
+    restart: unless-stopped
+    networks:
+      - telemetry
+
+  nginx:
+    image: nginx:latest
+    container_name: grafana-renderer-nginx
+    restart: unless-stopped
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - traefik-proxy
+      - telemetry
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.telemetry-grafana-renderer.rule=Host(`analytics.offsetmonkey538.top`) && PathPrefix(`/render`)"
+      - "traefik.http.services.telemetry-grafana-renderer.loadbalancer.server.port=80"
+
 
 networks:
     telemetry:
