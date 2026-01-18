@@ -8,13 +8,13 @@
   "timezone": "browser",
   "refresh": "15m",
   "time": {
-    "from": "now-7d",
+    "from": "now-30d",
     "to": "now"
   },
   "panels": [
     {
       "id": 1,
-      "type": "timeseries",
+      "type": "piechart",
       "title": "Total Minecraft version usage",
       "description": "Total amount of game launches recorded per Minecraft version",
       "datasource": {
@@ -22,7 +22,7 @@
         "uid": "prometheus-main"
       },
       "gridPos": {
-        "w": 12,
+        "w": 6,
         "h": 8,
         "x": 0,
         "y": 0
@@ -30,7 +30,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by(minecraft_version) (minecraft_launches_total{minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"})",
+          "expr": "sum by(minecraft_version) (increase(minecraft_launches_total{minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
           "legendFormat": "__auto"
         }
       ],
@@ -50,13 +50,16 @@
       "options": {
         "legend": {
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "right",
+          "values": [
+            "percent"
+          ]
         }
       }
     },
     {
       "id": 2,
-      "type": "timeseries",
+      "type": "piechart",
       "title": "Total mod loader usage",
       "description": "Total amount of game launches recorded per mod loader",
       "datasource": {
@@ -64,7 +67,7 @@
         "uid": "prometheus-main"
       },
       "gridPos": {
-        "w": 12,
+        "w": 6,
         "h": 8,
         "x": 0,
         "y": 8
@@ -72,7 +75,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by(mod_loader) (minecraft_launches_total{minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"})",
+          "expr": "sum by(mod_loader) (increase(minecraft_launches_total{minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
           "legendFormat": "__auto"
         }
       ],
@@ -92,13 +95,16 @@
       "options": {
         "legend": {
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "right",
+          "values": [
+            "percent"
+          ]
         }
       }
     },
     {
       "id": 3,
-      "type": "timeseries",
+      "type": "piechart",
       "title": "Total side launches",
       "description": "Amount of game launches recorded per side",
       "datasource": {
@@ -106,7 +112,7 @@
         "uid": "prometheus-main"
       },
       "gridPos": {
-        "w": 12,
+        "w": 6,
         "h": 8,
         "x": 0,
         "y": 16
@@ -114,7 +120,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by(environment) (minecraft_launches_total{minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"})",
+          "expr": "sum by(environment) (increase(minecraft_launches_total{minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
           "legendFormat": "__auto"
         }
       ],
@@ -134,7 +140,10 @@
       "options": {
         "legend": {
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "right",
+          "values": [
+            "percent"
+          ]
         }
       }
     },
@@ -148,15 +157,15 @@
         "uid": "prometheus-main"
       },
       "gridPos": {
-        "w": 12,
+        "w": 18,
         "h": 8,
-        "x": 12,
+        "x": 6,
         "y": 0
       },
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by(minecraft_version) (increase(minecraft_launches_total{minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[1h]))",
+          "expr": "avg_over_time(sum by(minecraft_version) (increase(minecraft_launches_total{minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[1h]))[$smooth:1h])",
           "legendFormat": "__auto"
         }
       ],
@@ -190,15 +199,15 @@
         "uid": "prometheus-main"
       },
       "gridPos": {
-        "w": 12,
+        "w": 18,
         "h": 8,
-        "x": 12,
-        "y": 8
+        "x": 6,
+        "y": 0
       },
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by(mod_loader) (increase(minecraft_launches_total{minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[1h]))",
+          "expr": "avg_over_time(sum by(mod_loader) (increase(minecraft_launches_total{minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[1h]))[$smooth:1h])",
           "legendFormat": "__auto"
         }
       ],
@@ -239,15 +248,15 @@
         "uid": "prometheus-main"
       },
       "gridPos": {
-        "w": 12,
+        "w": 18,
         "h": 8,
-        "x": 12,
-        "y": 16
+        "x": 6,
+        "y": 0
       },
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by(environment) (increase(minecraft_launches_total{minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[1h]))",
+          "expr": "avg_over_time(sum by(environment) (increase(minecraft_launches_total{minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[1h]))[$smooth:1h])",
           "legendFormat": "__auto"
         }
       ],
@@ -315,6 +324,18 @@
         },
         "refresh": 1,
         "type": "query"
+      },
+      {
+        "includeAll": false,
+        "label": "Smoothing",
+        "multi": false,
+        "name": "smooth",
+        "query": "1h,2h,3h,4h,5h,6h,7h,8h,9h,10h,11h,12h,13h,14h,15h,16h,17h,18h,19h,20h,21h,22h,23h,1d,2d,3d,4d,5d,6d,7d,8d,9d,10d,11d,12d,13d,14d,30d",
+        "type": "custom",
+        "current": {
+          "text": "6h",
+          "value": "6h"
+        }
       }
     ]
   }
