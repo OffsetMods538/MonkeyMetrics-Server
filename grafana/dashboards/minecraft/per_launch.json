@@ -14,6 +14,55 @@
   "panels": [
     {
       "id": 1,
+      "type": "timeseries",
+      "title": "Launches per hour",
+      "description": "Amount of game launches recorded per hour",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-main"
+      },
+      "gridPos": {
+        "w": 24,
+        "h": 8,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "avg_over_time(sum (increase(minecraft_launches_total{minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[1h]))[$smooth:1h])",
+          "legendFormat": "__auto"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "fillOpacity": 2
+          },
+          "mappings": [],
+          "thresholds": {}
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 2,
       "type": "piechart",
       "title": "Total Minecraft version usage",
       "description": "Total amount of game launches recorded per Minecraft version",
@@ -25,7 +74,7 @@
         "w": 6,
         "h": 8,
         "x": 0,
-        "y": 0
+        "y": 8
       },
       "targets": [
         {
@@ -58,7 +107,7 @@
       }
     },
     {
-      "id": 2,
+      "id": 3,
       "type": "piechart",
       "title": "Total mod loader usage",
       "description": "Total amount of game launches recorded per mod loader",
@@ -70,7 +119,7 @@
         "w": 6,
         "h": 8,
         "x": 0,
-        "y": 8
+        "y": 16
       },
       "targets": [
         {
@@ -103,9 +152,9 @@
       }
     },
     {
-      "id": 3,
+      "id": 4,
       "type": "piechart",
-      "title": "Total side launches",
+      "title": "Total side usage",
       "description": "Amount of game launches recorded per side",
       "datasource": {
         "type": "prometheus",
@@ -115,7 +164,7 @@
         "w": 6,
         "h": 8,
         "x": 0,
-        "y": 16
+        "y": 24
       },
       "targets": [
         {
@@ -148,7 +197,7 @@
       }
     },
     {
-      "id": 4,
+      "id": 5,
       "type": "timeseries",
       "title": "Minecraft version usage per hour",
       "description": "Amount of game launches recorded per Minecraft version per hour",
@@ -190,7 +239,7 @@
       }
     },
     {
-      "id": 5,
+      "id": 6,
       "type": "timeseries",
       "title": "Mod loader usage per hour",
       "description": "Amount of game launches recorded per mod loader per hour",
@@ -239,7 +288,7 @@
       }
     },
     {
-      "id": 6,
+      "id": 7,
       "type": "timeseries",
       "title": "Side launches per hour",
       "description": "Amount of game launches recorded per side per hour",
