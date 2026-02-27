@@ -38,7 +38,7 @@ jobs:
           VERSION_SUFFIX: ${{ env.short_commit_hash }}
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: Artifacts
           path: ./build/libs/
