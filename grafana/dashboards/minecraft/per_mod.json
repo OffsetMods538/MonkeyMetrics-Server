@@ -1,490 +1,870 @@
 {
-  "version": 1,
-  "schemaVersion": 42,
-  "title": "Launches per mod",
-  "uid": "launches-per-mod",
-  "editable": false,
-  "preload": true,
-  "timezone": "browser",
-  "refresh": "15m",
-  "time": {
-    "from": "now-30d",
-    "to": "now"
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "launches-per-mod"
   },
-  "panels": [
-    {
-      "id": 1,
-      "type": "timeseries",
-      "title": "Launches per hour",
-      "description": "Amount of game launches recorded per hour",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus-main"
-      },
-      "gridPos": {
-        "w": 24,
-        "h": 8,
-        "x": 0,
-        "y": 0
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "expr": "avg_over_time(sum (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[1h]))[$smooth:1h])",
-          "legendFormat": "__auto"
+  "spec": {
+    "title": "Launches per mod",
+    "editable": false,
+    "annotations": [],
+    "cursorSync": "Off",
+    "elements": {
+      "panel-1": {
+        "kind": "Panel",
+        "spec": {
+          "id": 1,
+          "title": "Launches per hour",
+          "description": "Amount of game launches recorded per hour",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus-main"
+                      },
+                      "spec": {
+                        "expr": "avg_over_time(sum (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[1h]))[$smooth:1h])",
+                        "legendFormat": "__auto"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "fillOpacity": 2
+                  },
+                  "mappings": []
+                },
+                "overrides": []
+              }
+            }
+          }
         }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "fillOpacity": 2
-          },
-          "mappings": [],
-          "thresholds": {}
-        },
-        "overrides": []
       },
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
+      "panel-2": {
+        "kind": "Panel",
+        "spec": {
+          "id": 2,
+          "title": "Total mod launches",
+          "description": "Total amount of game launches recorded per mod",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus-main"
+                      },
+                      "spec": {
+                        "expr": "sum by(mod) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
+                        "legendFormat": "__auto"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "piechart",
+            "version": "",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "right",
+                  "values": [
+                    "percent"
+                  ]
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "fillOpacity": 2
+                  },
+                  "mappings": []
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-3": {
+        "kind": "Panel",
+        "spec": {
+          "id": 3,
+          "title": "Total Minecraft version usage",
+          "description": "Total amount of game launches recorded per Minecraft version",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus-main"
+                      },
+                      "spec": {
+                        "expr": "sum by(minecraft_version) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
+                        "legendFormat": "__auto"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "piechart",
+            "version": "",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "right",
+                  "values": [
+                    "percent"
+                  ]
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "fillOpacity": 2
+                  },
+                  "mappings": []
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-4": {
+        "kind": "Panel",
+        "spec": {
+          "id": 4,
+          "title": "Total mod loader usage",
+          "description": "Total amount of game launches recorded per mod loader",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus-main"
+                      },
+                      "spec": {
+                        "expr": "sum by(mod_loader) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
+                        "legendFormat": "__auto"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "piechart",
+            "version": "",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "right",
+                  "values": [
+                    "percent"
+                  ]
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "fillOpacity": 2
+                  },
+                  "mappings": []
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "id": 5,
+          "title": "Total side usage",
+          "description": "Amount of game launches recorded per side",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus-main"
+                      },
+                      "spec": {
+                        "expr": "sum by(environment) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
+                        "legendFormat": "__auto"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "piechart",
+            "version": "",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "right",
+                  "values": [
+                    "percent"
+                  ]
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "fillOpacity": 2
+                  },
+                  "mappings": []
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-6": {
+        "kind": "Panel",
+        "spec": {
+          "id": 6,
+          "title": "Mod usage per hour",
+          "description": "Amount of game launches recorded per mod per hour",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus-main"
+                      },
+                      "spec": {
+                        "expr": "avg_over_time(sum by(mod) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[1h]))[$smooth:1h])",
+                        "legendFormat": "__auto"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "fillOpacity": 2
+                  },
+                  "mappings": []
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-7": {
+        "kind": "Panel",
+        "spec": {
+          "id": 7,
+          "title": "Minecraft version usage per hour",
+          "description": "Amount of game launches recorded per Minecraft version per hour",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus-main"
+                      },
+                      "spec": {
+                        "expr": "avg_over_time(sum by(minecraft_version) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[1h]))[$smooth:1h])",
+                        "legendFormat": "__auto"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "fillOpacity": 2
+                  },
+                  "mappings": []
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-8": {
+        "kind": "Panel",
+        "spec": {
+          "id": 8,
+          "title": "Mod loader usage per hour",
+          "description": "Amount of game launches recorded per mod loader per hour",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus-main"
+                      },
+                      "spec": {
+                        "expr": "avg_over_time(sum by(mod_loader) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[1h]))[$smooth:1h])",
+                        "legendFormat": "__auto"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "fillOpacity": 2
+                  },
+                  "mappings": []
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-9": {
+        "kind": "Panel",
+        "spec": {
+          "id": 9,
+          "title": "Side launches per hour",
+          "description": "Amount of game launches recorded per side per hour",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "prometheus-main"
+                      },
+                      "spec": {
+                        "expr": "avg_over_time(sum by(environment) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[1h]))[$smooth:1h])",
+                        "legendFormat": "__auto"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "",
+            "spec": {
+              "options": {
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "fillOpacity": 2
+                  },
+                  "mappings": []
+                },
+                "overrides": []
+              }
+            }
+          }
         }
       }
     },
-    {
-      "id": 2,
-      "type": "piechart",
-      "title": "Total mod launches",
-      "description": "Total amount of game launches recorded per mod",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus-main"
-      },
-      "gridPos": {
-        "w": 6,
-        "h": 8,
-        "x": 0,
-        "y": 8
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "expr": "sum by(mod) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
-          "legendFormat": "__auto"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
+    "layout": {
+      "kind": "GridLayout",
+      "spec": {
+        "items": [
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 8,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-1"
+              }
+            }
           },
-          "custom": {
-            "fillOpacity": 2
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 8,
+              "width": 6,
+              "height": 8,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-2"
+              }
+            }
           },
-          "mappings": [],
-          "thresholds": {}
-        },
-        "overrides": []
-      },
-      "options": {
-        "legend": {
-          "displayMode": "list",
-          "placement": "right",
-          "values": [
-            "percent"
-          ]
-        }
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 16,
+              "width": 6,
+              "height": 8,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-3"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 24,
+              "width": 6,
+              "height": 8,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-4"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 32,
+              "width": 6,
+              "height": 8,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-5"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 6,
+              "y": 8,
+              "width": 18,
+              "height": 8,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-6"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 6,
+              "y": 16,
+              "width": 18,
+              "height": 8,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-7"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 6,
+              "y": 24,
+              "width": 18,
+              "height": 8,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-8"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 6,
+              "y": 32,
+              "width": 18,
+              "height": 8,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-9"
+              }
+            }
+          }
+        ]
       }
     },
-    {
-      "id": 3,
-      "type": "piechart",
-      "title": "Total Minecraft version usage",
-      "description": "Total amount of game launches recorded per Minecraft version",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus-main"
-      },
-      "gridPos": {
-        "w": 6,
-        "h": 8,
-        "x": 0,
-        "y": 16
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "expr": "sum by(minecraft_version) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
-          "legendFormat": "__auto"
-        }
+    "links": [],
+    "preload": true,
+    "tags": [],
+    "timeSettings": {
+      "from": "now-30d",
+      "to": "now",
+      "autoRefresh": "15m",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
       ],
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "fillOpacity": 2
-          },
-          "mappings": [],
-          "thresholds": {}
-        },
-        "overrides": []
-      },
-      "options": {
-        "legend": {
-          "displayMode": "list",
-          "placement": "right",
-          "values": [
-            "percent"
-          ]
-        }
-      }
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
     },
-    {
-      "id": 4,
-      "type": "piechart",
-      "title": "Total mod loader usage",
-      "description": "Total amount of game launches recorded per mod loader",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus-main"
-      },
-      "gridPos": {
-        "w": 6,
-        "h": 8,
-        "x": 0,
-        "y": 24
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "expr": "sum by(mod_loader) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
-          "legendFormat": "__auto"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "fillOpacity": 2
-          },
-          "mappings": [],
-          "thresholds": {}
-        },
-        "overrides": []
-      },
-      "options": {
-        "legend": {
-          "displayMode": "list",
-          "placement": "right",
-          "values": [
-            "percent"
-          ]
-        }
-      }
-    },
-    {
-      "id": 5,
-      "type": "piechart",
-      "title": "Total side usage",
-      "description": "Amount of game launches recorded per side",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus-main"
-      },
-      "gridPos": {
-        "w": 6,
-        "h": 8,
-        "x": 0,
-        "y": 32
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "expr": "sum by(environment) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
-          "legendFormat": "__auto"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "fillOpacity": 2
-          },
-          "mappings": [],
-          "thresholds": {}
-        },
-        "overrides": []
-      },
-      "options": {
-        "legend": {
-          "displayMode": "list",
-          "placement": "right",
-          "values": [
-            "percent"
-          ]
-        }
-      }
-    },
-    {
-      "id": 6,
-      "type": "timeseries",
-      "title": "Mod usage per hour",
-      "description": "Amount of game launches recorded per mod per hour",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus-main"
-      },
-      "gridPos": {
-        "w": 18,
-        "h": 8,
-        "x": 6,
-        "y": 8
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "expr": "avg_over_time(sum by(mod) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[1h]))[$smooth:1h])",
-          "legendFormat": "__auto"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "fillOpacity": 2
-          },
-          "mappings": [],
-          "thresholds": {}
-        },
-        "overrides": []
-      },
-      "options": {
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom"
-        }
-      }
-    },
-    {
-      "id": 7,
-      "type": "timeseries",
-      "title": "Minecraft version usage per hour",
-      "description": "Amount of game launches recorded per Minecraft version per hour",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus-main"
-      },
-      "gridPos": {
-        "w": 18,
-        "h": 8,
-        "x": 6,
-        "y": 16
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "expr": "avg_over_time(sum by(minecraft_version) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[1h]))[$smooth:1h])",
-          "legendFormat": "__auto"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "fillOpacity": 2
-          },
-          "mappings": [],
-          "thresholds": {}
-        },
-        "overrides": []
-      },
-      "options": {
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom"
-        }
-      }
-    },
-    {
-      "id": 8,
-      "type": "timeseries",
-      "title": "Mod loader usage per hour",
-      "description": "Amount of game launches recorded per mod loader per hour",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus-main"
-      },
-      "gridPos": {
-        "w": 18,
-        "h": 8,
-        "x": 6,
-        "y": 24
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "expr": "avg_over_time(sum by(mod_loader) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[1h]))[$smooth:1h])",
-          "legendFormat": "__auto"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "fillOpacity": 2
-          },
-          "mappings": [],
-          "thresholds": {}
-        },
-        "overrides": []
-      },
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      }
-    },
-    {
-      "id": 9,
-      "type": "timeseries",
-      "title": "Side launches per hour",
-      "description": "Amount of game launches recorded per side per hour",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus-main"
-      },
-      "gridPos": {
-        "w": 18,
-        "h": 8,
-        "x": 6,
-        "y": 32
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "expr": "avg_over_time(sum by(environment) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[1h]))[$smooth:1h])",
-          "legendFormat": "__auto"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "fillOpacity": 2
-          },
-          "mappings": [],
-          "thresholds": {}
-        },
-        "overrides": []
-      },
-      "options": {
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom"
-        }
-      }
-    }
-  ],
-  "templating": {
-    "list": [
+    "variables": [
       {
-        "definition": "label_values(mod_launches_total,mod)",
-        "includeAll": true,
-        "label": "Mod",
-        "multi": true,
-        "name": "mod",
-        "query": {
-          "qryType": 1,
-          "query": "label_values(mod_launches_total,mod)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 1,
-        "type": "query"
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "mod",
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "query": {
+            "kind": "DataQuery",
+            "group": "prometheus",
+            "version": "v0",
+            "spec": {
+              "query": "label_values(mod_launches_total,mod)"
+            }
+          },
+          "regex": "",
+          "sort": "disabled",
+          "definition": "label_values(mod_launches_total,mod)",
+          "options": [],
+          "multi": true,
+          "includeAll": true,
+          "label": "Mod"
+        }
       },
       {
-        "definition": "label_values(mod_launches_total,minecraft_version)",
-        "includeAll": true,
-        "label": "Minecraft Version",
-        "multi": true,
-        "name": "minecraft_version",
-        "query": {
-          "qryType": 1,
-          "query": "label_values(mod_launches_total,minecraft_version)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 1,
-        "type": "query"
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "minecraft_version",
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "query": {
+            "kind": "DataQuery",
+            "group": "prometheus",
+            "version": "v0",
+            "spec": {
+              "query": "label_values(mod_launches_total,minecraft_version)"
+            }
+          },
+          "regex": "",
+          "sort": "disabled",
+          "definition": "label_values(mod_launches_total,minecraft_version)",
+          "options": [],
+          "multi": true,
+          "includeAll": true,
+          "label": "Minecraft Version"
+        }
       },
       {
-        "definition": "label_values(mod_launches_total,mod_loader)",
-        "includeAll": true,
-        "label": "Mod Loader",
-        "multi": true,
-        "name": "mod_loader",
-        "query": {
-          "qryType": 1,
-          "query": "label_values(mod_launches_total,mod_loader)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 1,
-        "type": "query"
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "mod_loader",
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "query": {
+            "kind": "DataQuery",
+            "group": "prometheus",
+            "version": "v0",
+            "spec": {
+              "query": "label_values(mod_launches_total,mod_loader)"
+            }
+          },
+          "regex": "",
+          "sort": "disabled",
+          "definition": "label_values(mod_launches_total,mod_loader)",
+          "options": [],
+          "multi": true,
+          "includeAll": true,
+          "label": "Mod Loader"
+        }
       },
       {
-        "definition": "label_values(mod_launches_total,environment)",
-        "includeAll": true,
-        "label": "Environment",
-        "multi": true,
-        "name": "environment",
-        "query": {
-          "qryType": 1,
-          "query": "label_values(mod_launches_total,environment)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 1,
-        "type": "query"
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "environment",
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "query": {
+            "kind": "DataQuery",
+            "group": "prometheus",
+            "version": "v0",
+            "spec": {
+              "query": "label_values(mod_launches_total,environment)"
+            }
+          },
+          "regex": "",
+          "sort": "disabled",
+          "definition": "label_values(mod_launches_total,environment)",
+          "options": [],
+          "multi": true,
+          "includeAll": true,
+          "label": "Environment"
+        }
       },
       {
-        "includeAll": false,
-        "label": "Smoothing",
-        "multi": false,
-        "name": "smooth",
-        "query": "1h,2h,3h,4h,5h,6h,7h,8h,9h,10h,11h,12h,13h,14h,15h,16h,17h,18h,19h,20h,21h,22h,23h,1d,2d,3d,4d,5d,6d,7d,8d,9d,10d,11d,12d,13d,14d,30d",
-        "type": "custom",
-        "current": {
-          "text": "6h",
-          "value": "6h"
+        "kind": "CustomVariable",
+        "spec": {
+          "name": "smooth",
+          "query": "1h,2h,3h,4h,5h,6h,7h,8h,9h,10h,11h,12h,13h,14h,15h,16h,17h,18h,19h,20h,21h,22h,23h,1d,2d,3d,4d,5d,6d,7d,8d,9d,10d,11d,12d,13d,14d,30d",
+          "current": {
+            "text": "6h",
+            "value": "6h"
+          },
+          "options": [],
+          "multi": false,
+          "includeAll": false,
+          "hide": "dontHide",
+          "skipUrlSync": false,
+          "label": "Smoothing"
         }
       }
     ]
