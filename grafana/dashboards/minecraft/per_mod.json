@@ -102,7 +102,9 @@
                       },
                       "spec": {
                         "expr": "sum by(mod) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
-                        "legendFormat": "__auto"
+                        "legendFormat": "__auto",
+                        "range": false,
+                        "instant": true
                       }
                     },
                     "refId": "A",
@@ -167,7 +169,9 @@
                       },
                       "spec": {
                         "expr": "sum by(minecraft_version) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
-                        "legendFormat": "__auto"
+                        "legendFormat": "__auto",
+                        "range": false,
+                        "instant": true
                       }
                     },
                     "refId": "A",
@@ -232,7 +236,9 @@
                       },
                       "spec": {
                         "expr": "sum by(mod_loader) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
-                        "legendFormat": "__auto"
+                        "legendFormat": "__auto",
+                        "range": false,
+                        "instant": true
                       }
                     },
                     "refId": "A",
@@ -297,7 +303,9 @@
                       },
                       "spec": {
                         "expr": "sum by(environment) (increase(mod_launches_total{mod=~\"$mod\", minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
-                        "legendFormat": "__auto"
+                        "legendFormat": "__auto",
+                        "range": false,
+                        "instant": true
                       }
                     },
                     "refId": "A",

@@ -102,7 +102,9 @@
                       },
                       "spec": {
                         "expr": "sum by(minecraft_version) (increase(minecraft_launches_total{minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
-                        "legendFormat": "__auto"
+                        "legendFormat": "__auto",
+                        "range": false,
+                        "instant": true
                       }
                     },
                     "refId": "A",
@@ -167,7 +169,9 @@
                       },
                       "spec": {
                         "expr": "sum by(mod_loader) (increase(minecraft_launches_total{minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
-                        "legendFormat": "__auto"
+                        "legendFormat": "__auto",
+                        "range": false,
+                        "instant": true
                       }
                     },
                     "refId": "A",
@@ -232,7 +236,9 @@
                       },
                       "spec": {
                         "expr": "sum by(environment) (increase(minecraft_launches_total{minecraft_version=~\"$minecraft_version\", mod_loader=~\"$mod_loader\", environment=~\"$environment\"}[$__range]))",
-                        "legendFormat": "__auto"
+                        "legendFormat": "__auto",
+                        "range": false,
+                        "instant": true
                       }
                     },
                     "refId": "A",
