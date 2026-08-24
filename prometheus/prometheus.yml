@@ -6,3 +6,8 @@ scrape_configs:
     static_configs:
       - targets:
           - ingest:9696
+
+  - job_name: "grafana-image-rendering-service"
+    static_configs:
+      - targets:
+          - renderer:8081
